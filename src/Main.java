@@ -16,12 +16,6 @@ public class Main {
         wine.setBrandmark("Chateau Lafite Rothschild");
         wine.setAddInfo("Grape variety - Cabernet Sauvignon, Merlot");
 
-        //получаем информацию из класса
-        String name = wine.getNameOfWine();
-        String country = wine.getNameOfCountry();
-        String brandmark = wine.getBrandmark();
-        String note = wine.getAddInfo();
-
         //определение текущей даты
         Date d = new Date();
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -29,12 +23,32 @@ public class Main {
         String d1 = df.format(d);
 
         //вызываем метод, определяющий выдержку вина
-        long days = wine.Calculate(d1);
-
+        long days = calculate(d1, wine.getDateOfSpill());
+        if (wine.getBrandMark() != null) {
+            System.out.println(wine.getBrandMark());
+        }
         //вывод результата на консоль
-        System.out.println("Aging wine called " +name+ " is " +days+ " days" );
-        System.out.println("His brandmark is: " +brandmark);
-        System.out.println("Country of Origin: " +country);
-        System.out.println("Addinfo: " +note);
+        System.out.println(wine);
+        System.out.println("Aging wine called " + wine.getName() + " is " + days + " days");
+
+    }
+    //Расчёт выдержки вина (текущая дата даётся как аргумент).
+
+    public static long calculate(String curDate, String dateSpill) {
+
+        SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
+        Date firstDate = null;
+        Date secondDate = null;
+
+        try {
+            firstDate = form.parse(curDate);
+            secondDate = form.parse(dateSpill);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        long difference = firstDate.getTime() - secondDate.getTime();
+        //возвращается число дней
+        return difference / (24 * 60 * 60 * 1000);
     }
 }
